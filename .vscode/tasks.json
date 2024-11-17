@@ -9,9 +9,12 @@
                 "-g",
                 "${file}",
                 "-o",
-                "${fileBasenameNoExtension}.exe"
+                "${fileDirname}/${fileBasenameNoExtension}.exe"
             ],
-            "group": "build"
+            "group": "build",
+            "problemMatcher": [
+                "$gcc"
+            ]
         },
         {
             "type": "cppbuild",
