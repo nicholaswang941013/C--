@@ -1,43 +1,47 @@
 #include <iostream>
-#include <cstdlib>
 #include <vector>
-#include <cmath>   // åŒ…å« pow å’Œ sqrt å‡½æ•¸çš„æ¨™é ­æª”(ç®—æ¬¡æ–¹å’Œå¹³æ–¹æ ¹)
-#include <iomanip>  // åŒ…å«æ§åˆ¶è¼¸å‡ºæ ¼å¼çš„æ¨™é ­æª”
+#include <cmath>
+#include <iomanip>
+#include <limits>
 
 using namespace std;
 
-// è¨ˆç®—å¹³å‡å€¼
+// ­pºâ¥­§¡­È
 double average(const vector<double> & data){
-    double sum = 0.0;
-    double num = 0.0;
+    // ¦pªG¸ê®Æ¶°¬°ªÅ¡Aªğ¦^0
+    if(data.empty()){
+        return 0.0;
+    }
     
-    for(int y = 0; y < data.size(); y++){
-        num = data[y];
+    double sum = 0.0;
+    // ¹M¾ú¸ê®Æ¶°¡A­pºâÁ`©M
+    for(const auto & num : data){
         sum += num;
     }
     
-    if(data.size() == 0){
-        return 0.0;  // å¦‚æœè³‡æ–™é›†ç‚ºç©ºï¼Œè¿”å›0
-    }
-    
+    // ­pºâ¥­§¡­È
     return sum / data.size();
 }
 
-// è¨ˆç®—æ¨™æº–å·®
+// ­pºâ¼Ğ·Ç®t
 double sigma(const vector<double> & data){
-    double deviation = 0.0;
+    // ¦pªG¸ê®Æ¶°¬°ªÅ¡Aªğ¦^0
+    if(data.empty()){
+        return 0.0;
+    }
+    
+    // ¥ı­pºâ¥­§¡­È
+    double mean = average(data);
     double variation = 0.0;
 
-    for (int x = 0; x < data.size(); x++){
-        deviation = data[x] - average(data);
-        variation += (deviation*deviation);
+    // ­pºâ¨C­Ó¼Æ¾Ú»P¥­§¡­Èªº®t²§ªº¥­¤è©M
+    for (const auto & num : data){
+        double deviation = num - mean;
+        variation += (deviation * deviation);
     }
     
-    if(data.size() == 0){
-        return 0.0;  // å¦‚æœè³‡æ–™é›†ç‚ºç©ºï¼Œè¿”å›0
-    }
-    
-    return sqrt(variation / data.size() );
+    // ­pºâ¼Ğ·Ç®t
+    return sqrt(variation / data.size());
 }
 
 int main()
@@ -45,25 +49,40 @@ int main()
     int numData;
     vector<double> data;
     
-    // æç¤ºä½¿ç”¨è€…è¼¸å…¥è³‡æ–™æ•¸é‡
+    // ´£¥Ü¨Ï¥ÎªÌ¿é¤J¸ê®Æ¼Æ¶q
     cout << "How many data: ";
-    cin >> numData;
+    // ÀË¬d¿é¤J¬O§_¬°¥¿¾ã¼Æ
+    while (!(cin >> numData) || numData <= 0) {
+        cout << "Please enter a positive integer: ";
+        // ²M°£¿ù»~ª¬ºA¨Ã©¿²¤·í«e¿é¤J
+        cin.clear();
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+    }
     
-    // è¼¸å…¥è³‡æ–™
+    // ¿é¤J¸ê®Æ
     for (int i = 0; i < numData; ++i) {
-        float value;
-        cout << "please enter " << i+1 << " data: ";
-        cin >> value;
+        double value;
+        cout << "Please enter " << i+1 << " data: ";
+        // ÀË¬d¿é¤J¬O§_¬°¼Æ¦r
+        while (!(cin >> value)) {
+            cout << "Invalid input. Please enter a number: ";
+            // ²M°£¿ù»~ª¬ºA¨Ã©¿²¤·í«e¿é¤J
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        }
         data.push_back(value);
     }
     
-    // è¨­å®šè¼¸å‡ºæ ¼å¼ç‚ºå°æ•¸é»å¾Œä¸‰ä½
+    // ³]©w¿é¥X®æ¦¡¬°¤p¼ÆÂI«á¤T¦ì
     cout << fixed << setprecision(3);
     
-    // è¼¸å‡ºå¹³å‡å€¼å’Œæ¨™æº–å·®
-    cout << "average: " << average(data) << endl;
-    cout << "sigma: " << sigma(data) << endl;
+    // ¿é¥X¥­§¡­È©M¼Ğ·Ç®t
+    cout << "Average: " << average(data) << endl;
+    cout << "Sigma: " << sigma(data) << endl;
     
-    system("pause");
+    // µ¥«İ¨Ï¥ÎªÌ«ö¤U¥ô·NÁä
+    cout << "Press any key to continue...";
+    cin.ignore();
+    cin.get();
     return 0;
 }
